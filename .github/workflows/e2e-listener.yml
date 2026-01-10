@@ -1,0 +1,91 @@
+name: E2E Test Listener
+
+on:
+  repository_dispatch:
+    types: [trigger-e2e-check]
+  workflow_dispatch:
+
+jobs:
+  e2e-tests:
+    name: Run E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Checkout E2E repository
+        uses: actions/checkout@v4
+
+      - name: Log incoming payload
+        run: |
+          echo "=== E2E Test Trigger Info ==="
+          echo "Repository: ${{ github.event.client_payload.repo_name }}"
+          echo "Commit SHA: ${{ github.event.client_payload.commit_sha }}"
+          echo "============================"
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull Docker images
+        run: docker compose pull
+        env:
+          NAURFFXIV_IMAGE: ${{ github.event.client_payload.naurffxiv_image || 'ghcr.io/naurffxiv/naurffxiv:latest' }}
+          MODDINGWAY_IMAGE: ${{ github.event.client_payload.moddingway_image || 'ghcr.io/naurffxiv/moddingway:latest' }}
+          AUTHINGWAY_IMAGE: ${{ github.event.client_payload.authingway_image || 'ghcr.io/naurffxiv/authingway:latest' }}
+
+      - name: Run E2E tests
+        run: docker compose up --abort-on-container-exit
+        env:
+          NAURFFXIV_IMAGE: ${{ github.event.client_payload.naurffxiv_image || 'ghcr.io/naurffxiv/naurffxiv:latest' }}
+          MODDINGWAY_IMAGE: ${{ github.event.client_payload.moddingway_image || 'ghcr.io/naurffxiv/moddingway:latest' }}
+          AUTHINGWAY_IMAGE: ${{ github.event.client_payload.authingway_image || 'ghcr.io/naurffxiv/authingway:latest' }}
+
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results/
+          retention-days: 7
+
+      - name: Report Status to Source PR
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.PAT_TOKEN }}
+          script: |
+            // Only run if triggered by repository_dispatch
+            if (context.eventName !== 'repository_dispatch') return;
+
+            const { repo_name, commit_sha } = context.payload.client_payload;
+            if (!repo_name || !commit_sha) return;
+
+            const [owner, repo] = repo_name.split('/');
+            const state = '${{ job.status }}' === 'success' ? 'success' : 'failure';
+
+            console.log(`Updating status for ${repo_name} at ${commit_sha} to ${state}`);
+
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: commit_sha,
+              state: state,
+              context: 'E2E Tests (Playwright)',
+              description: state === 'success' ? 'Tests passed' : 'Tests failed',
+              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+            });

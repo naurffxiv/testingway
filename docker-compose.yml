@@ -1,0 +1,91 @@
+# =============================================================================
+# Centralized E2E Testing - NAUR Ecosystem
+# Docker Compose Configuration
+# =============================================================================
+
+services:
+  # Website (Next.js/MDX)
+  naurffxiv:
+    # Uses the variable passed from GitHub Actions, or defaults to 'latest' locally
+    image: ${NAURFFXIV_IMAGE:-ghcr.io/naurffxiv/naurffxiv:latest}
+    container_name: naurffxiv
+    restart: unless-stopped
+    ports:
+      - "3000:3000" # Assuming Next.js runs on 3000 internally
+    networks:
+      - naur-net
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Moderation Bot (Python)
+  moddingway:
+    image: ${MODDINGWAY_IMAGE:-ghcr.io/naurffxiv/moddingway:latest}
+    container_name: moddingway
+    restart: unless-stopped
+    ports:
+      - "8000:8000" # Assuming Python/FastAPI runs on 8000
+    networks:
+      - naur-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"] # Adjust path if needed
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Auth Service (C#)
+  authingway:
+    image: ${AUTHINGWAY_IMAGE:-ghcr.io/naurffxiv/authingway:latest}
+    container_name: authingway
+    restart: unless-stopped
+    ports:
+      - "5000:8080" # Assuming C# maps 8080 internal to 5000 external
+    networks:
+      - naur-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"] # Adjust path if needed
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # E2E Test Runner (Playwright)
+  e2e-runner:
+    image: mcr.microsoft.com/playwright:v1.57.0-jammy
+    container_name: e2e-runner
+    working_dir: /app
+    depends_on:
+      naurffxiv:
+        condition: service_healthy
+      moddingway:
+        condition: service_healthy
+      authingway:
+        condition: service_healthy
+    networks:
+      - naur-net
+    environment:
+      - CI=true
+      # Pointing to internal Docker DNS names
+      - NAURFFXIV_URL=http://naurffxiv:3000
+      - MODDINGWAY_URL=http://moddingway:8000
+      - AUTHINGWAY_URL=http://authingway:8080
+    volumes:
+      - ./tests:/app/tests
+      - ./playwright.config.ts:/app/playwright.config.ts
+      - ./package.json:/app/package.json
+      - ./package-lock.json:/app/package-lock.json
+      # Bind mount reports so we can upload them in CI
+      - ./playwright-report:/app/playwright-report
+      - ./test-results:/app/test-results
+    # Use 'npm ci' for faster, reliable installs in CI
+    command: >
+      sh -c "npm ci && npx playwright test"
+
+networks:
+  naur-net:
+    name: naur-net
+    driver: bridge

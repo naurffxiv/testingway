@@ -1,0 +1,33 @@
+{
+  "name": "testingway",
+  "version": "1.0.0",
+  "description": "Centralized E2E Testing Repository - Docker-based Playwright testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "clean": "npx rimraf node_modules package-lock.json test-results playwright-report .playwright",
+    "fresh": "npm run clean && npm install"
+  },
+  "keywords": [
+    "playwright",
+    "e2e",
+    "testing",
+    "docker",
+    "centralized-testing"
+  ],
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/naurffxiv/testingway.git"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.6",
+    "dotenv": "^17.2.3",
+    "rimraf": "^6.0.1"
+  }
+}
