@@ -44,7 +44,7 @@ When `moddingway` builds a new version, it triggers E2E tests with its fresh ima
 ```mermaid
 sequenceDiagram
     participant Dev as Developer
-    participant App as App Repo (naurffxiv)
+    participant App as App Repo (moddingway)
     participant E2E as E2E Repo (testingway)
     participant GHCR as Container Registry
 
