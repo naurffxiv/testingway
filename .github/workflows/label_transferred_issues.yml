@@ -2,7 +2,7 @@ name: Label Transferred Issues
 
 on:
   issues:
-    types: [transferred]
+    types: [transferred, opened]
 
 permissions:
   issues: write

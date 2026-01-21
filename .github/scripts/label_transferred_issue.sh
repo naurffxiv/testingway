@@ -12,15 +12,15 @@ fi
 
 # We only care about transferred issues
 ACTION=$(jq -r '.action' "$EVENT_PATH")
-if [[ "$ACTION" != "transferred" ]]; then
-    echo "Action is '$ACTION', not 'transferred'. Skipping."
+if [[ "$ACTION" != "transferred" ]] && [[ "$ACTION" != "opened" ]]; then
+    echo "Action is '$ACTION', not 'transferred' or 'opened'. Skipping."
     exit 0
 fi
 
 SOURCE_REPO=$(jq -r '.changes.old_repository.full_name // empty' "$EVENT_PATH")
 
 if [ -z "$SOURCE_REPO" ]; then
-    echo "No source repository found for transferred issue."
+    echo "No source repository found for transferred issue (Action: $ACTION)."
     exit 0
 fi
 
