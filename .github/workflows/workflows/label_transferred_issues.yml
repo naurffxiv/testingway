@@ -1,0 +1,57 @@
+name: Label Transferred Issues
+
+on:
+  issues:
+    types: [transferred]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  auto-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Auto label transferred issue
+        id: labeler
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          chmod +x .github/scripts/label_transferred_issue.sh
+
+          OUTPUT=$(.github/scripts/label_transferred_issue.sh \
+            "${{ github.event.issue.number }}" \
+            "${{ github.event_name }}" \
+            "${{ github.event_path }}" 2>&1)
+
+          EXIT_CODE=$?
+          echo "$OUTPUT"
+
+          cat <<EOF >> $GITHUB_STEP_SUMMARY
+          ## Transferred Issue Labeler Results
+          **Issue:** #${{ github.event.issue.number }}
+          **Action:** ${{ github.event.action }}
+          **Title:** ${{ github.event.issue.title }}
+
+          ### Output
+          \`\`\`
+          $OUTPUT
+          \`\`\`
+          EOF
+
+          exit $EXIT_CODE
+
+      - name: Comment on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: '**Automatic labeling of transferred issue failed**\n\nCheck [workflow logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.'
+            })
