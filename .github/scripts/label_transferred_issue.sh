@@ -10,20 +10,6 @@ if [ -z "$ISSUE_NUMBER" ] || [ -z "$EVENT_NAME" ] || [ -z "$EVENT_PATH" ]; then
     exit 1
 fi
 
-for cmd in jq gh; do
-    if ! command -v "$cmd" &> /dev/null; then
-        echo "Error: $cmd is not installed"
-        exit 1
-    fi
-done
-
-if [ ! -f "$EVENT_PATH" ]; then
-    echo "Error: Event file not found: $EVENT_PATH"
-    exit 1
-fi
-
-LABELS_TO_ADD=()
-
 # We only care about transferred issues
 ACTION=$(jq -r '.action' "$EVENT_PATH")
 if [[ "$ACTION" != "transferred" ]]; then
@@ -31,7 +17,7 @@ if [[ "$ACTION" != "transferred" ]]; then
     exit 0
 fi
 
-SOURCE_REPO=$(jq -r '.changes.new_repository.full_name // empty' "$EVENT_PATH")
+SOURCE_REPO=$(jq -r '.changes.old_repository.full_name // empty' "$EVENT_PATH")
 
 if [ -z "$SOURCE_REPO" ]; then
     echo "No source repository found for transferred issue."
@@ -39,6 +25,8 @@ if [ -z "$SOURCE_REPO" ]; then
 fi
 
 echo "Transferred from: $SOURCE_REPO"
+
+LABELS_TO_ADD=()
 
 # Map source repos to labels using a cleaner substring match
 if [[ "$SOURCE_REPO" == *authingway* ]]; then
