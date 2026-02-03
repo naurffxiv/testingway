@@ -1,0 +1,75 @@
+name: Tech Debt
+description: Work needed to address suboptimal code or design decisions
+title: "[Tech Debt] "
+type: Tech Debt
+projects: ["naurffxiv/10"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Create a tech debt item.
+
+  - type: dropdown
+    id: service
+    attributes:
+      label: Service / Component
+      description: Which part of the codebase is this related to?
+      options:
+        - Other
+        - Authingway
+        - Clearingway
+        - Findingway
+        - Moddingway
+        - Naurffxiv
+        - AppHost (Aspire)
+        - Shared Libraries
+        - Global / Monorepo
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Functional Area
+      description: What is the primary technical concern or domain?
+      options:
+        - Other
+        - Backend / API
+        - Frontend / UI
+        - Infrastructure (CI/CD, Docker)
+        - Security
+        - Documentation
+        - Quality / Testing
+        - Developer Experience
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Description of the suboptimal code or design.
+      placeholder: Describe the current state...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: How should we fix it?
+      placeholder: Describe the desired state...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact
+      description: How critical is this debt?
+      options:
+        - Low
+        - Medium
+        - High
+    validations:
+      required: true

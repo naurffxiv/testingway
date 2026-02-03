@@ -1,0 +1,80 @@
+name: Epic
+description: Track multiple issues that cannot be fit into one
+title: "[Epic] "
+type: Epic
+projects: ["naurffxiv/10"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Create an epic.
+
+  - type: dropdown
+    id: service
+    attributes:
+      label: Service / Component
+      description: Which part of the codebase is this epic related to?
+      options:
+        - Other
+        - Authingway
+        - Clearingway
+        - Findingway
+        - Moddingway
+        - Naurffxiv
+        - AppHost (Aspire)
+        - Shared Libraries
+        - Global / Monorepo
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Functional Area
+      description: What is the primary technical concern or domain?
+      options:
+        - Other
+        - Backend / API
+        - Frontend / UI
+        - Infrastructure (CI/CD, Docker)
+        - Security
+        - Documentation
+        - Quality / Testing
+        - Developer Experience
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Epic Description
+      description: High-level goal and context.
+      placeholder: Describe the epic here...
+    validations:
+      required: true
+
+  - type: textarea
+    id: in-scope
+    attributes:
+      label: In Scope
+      description: What is included in this epic?
+      placeholder: "- Feature A\n- Feature B"
+    validations:
+      required: true
+
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of Scope
+      description: What is explicitly excluded?
+      placeholder: "- Feature C"
+    validations:
+      required: false
+
+  - type: textarea
+    id: deliverables
+    attributes:
+      label: Key Deliverables
+      description: Bullet points of expected outcomes.
+    validations:
+      required: false

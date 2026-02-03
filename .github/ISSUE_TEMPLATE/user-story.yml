@@ -1,0 +1,118 @@
+name: User Story
+description: A description of a feature from an end-user perspective
+title: "[Story] "
+type: Story
+projects: ["naurffxiv/10"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Create a user story.
+
+  - type: dropdown
+    id: service
+    attributes:
+      label: Service / Component
+      description: Which part of the codebase is this story related to?
+      options:
+        - Other
+        - Authingway
+        - Clearingway
+        - Findingway
+        - Moddingway
+        - Naurffxiv
+        - AppHost (Aspire)
+        - Shared Libraries
+        - Global / Monorepo
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Functional Area
+      description: What is the primary technical concern or domain?
+      options:
+        - Other
+        - Backend / API
+        - Frontend / UI
+        - Infrastructure (CI/CD, Docker)
+        - Security
+        - Documentation
+        - Quality / Testing
+        - Developer Experience
+    validations:
+      required: true
+
+  - type: input
+    id: user-type
+    attributes:
+      label: User Type
+      description: "As a..."
+      placeholder: "Example: As a Discord User, Moderator, Admin, Dev, etc..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-goal
+    attributes:
+      label: User Goal
+      description: "I want..."
+      placeholder: "Example: I want to export my data as a CSV file"
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-benefit
+    attributes:
+      label: User Benefit
+      description: "So that..."
+      placeholder: "Example: So that I can open it in Excel and create reports"
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: List clear, testable requirements (one per line)
+      placeholder: |
+        - [ ] Criteria 1: The 'Export CSV' button is visible on the dashboard
+        - [ ] Criteria 2: Clicking the button downloads a file named 'data-export.csv'
+        - [ ] Criteria 3: The CSV contains all the columns displayed in the table
+      value: |
+        - [ ]
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: What is the priority of this story?
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
+      default: 1
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical-notes
+    attributes:
+      label: Technical Notes
+      description: Technical considerations, dependencies, or implementation details
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other relevant information
+    validations:
+      required: false

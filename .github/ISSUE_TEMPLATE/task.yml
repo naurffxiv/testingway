@@ -1,0 +1,64 @@
+name: Task
+description: Generic work item, typically requires little to no code
+title: "[Task] "
+type: Task
+projects: ["naurffxiv/10"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Create a task.
+
+  - type: dropdown
+    id: service
+    attributes:
+      label: Service / Component
+      description: Which part of the codebase is this task related to?
+      options:
+        - Other
+        - Authingway
+        - Clearingway
+        - Findingway
+        - Moddingway
+        - Naurffxiv
+        - AppHost (Aspire)
+        - Shared Libraries
+        - Global / Monorepo
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Functional Area
+      description: What is the primary technical concern or domain?
+      options:
+        - Other
+        - Backend / API
+        - Frontend / UI
+        - Infrastructure (CI/CD, Docker)
+        - Security
+        - Documentation
+        - Quality / Testing
+        - Developer Experience
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Task Description
+      description: What needs to be done?
+      placeholder: Describe the task...
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: Checklist of requirements.
+      value: |
+        - [ ]
+    validations:
+      required: false

@@ -1,0 +1,72 @@
+name: Spike
+description: Research or investigation needed to understand an approach
+title: "[Spike] "
+type: Spike
+projects: ["naurffxiv/10"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Create a research spike.
+
+  - type: dropdown
+    id: service
+    attributes:
+      label: Service / Component
+      description: Which part of the codebase is this spike related to?
+      options:
+        - Other
+        - Authingway
+        - Clearingway
+        - Findingway
+        - Moddingway
+        - Naurffxiv
+        - AppHost (Aspire)
+        - Shared Libraries
+        - Global / Monorepo
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Functional Area
+      description: What is the primary technical concern or domain?
+      options:
+        - Other
+        - Backend / API
+        - Frontend / UI
+        - Infrastructure (CI/CD, Docker)
+        - Security
+        - Documentation
+        - Quality / Testing
+        - Developer Experience
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What are we researching?
+      placeholder: Describe the goal...
+    validations:
+      required: true
+
+  - type: textarea
+    id: questions
+    attributes:
+      label: Questions to Answer
+      description: Key questions that need to be answered.
+      placeholder: "- Question 1?\n- Question 2?"
+    validations:
+      required: true
+
+  - type: input
+    id: timebox
+    attributes:
+      label: Timebox
+      description: How long should this take?
+      placeholder: "e.g., 1 day, 1 week, 1 month"
+    validations:
+      required: false
