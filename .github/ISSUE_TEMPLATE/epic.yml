@@ -12,6 +12,7 @@ body:
     id: service
     attributes:
       label: Service / Component
+      multiple: true
       description: Which part of the codebase is this epic related to?
       options:
         - Other
@@ -30,6 +31,7 @@ body:
     id: area
     attributes:
       label: Functional Area
+      multiple: true
       description: What is the primary technical concern or domain?
       options:
         - Other
@@ -38,7 +40,8 @@ body:
         - Infrastructure (CI/CD, Docker)
         - Security
         - Documentation
-        - Quality / Testing
+        - Quality Assurance
+        - Testing
         - Developer Experience
     validations:
       required: true

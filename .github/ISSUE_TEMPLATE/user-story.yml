@@ -12,6 +12,7 @@ body:
     id: service
     attributes:
       label: Service / Component
+      multiple: true
       description: Which part of the codebase is this story related to?
       options:
         - Other
@@ -30,6 +31,7 @@ body:
     id: area
     attributes:
       label: Functional Area
+      multiple: true
       description: What is the primary technical concern or domain?
       options:
         - Other
@@ -38,7 +40,8 @@ body:
         - Infrastructure (CI/CD, Docker)
         - Security
         - Documentation
-        - Quality / Testing
+        - Quality Assurance
+        - Testing
         - Developer Experience
     validations:
       required: true
@@ -79,10 +82,6 @@ body:
         - [ ] Criteria 1: The 'Export CSV' button is visible on the dashboard
         - [ ] Criteria 2: Clicking the button downloads a file named 'data-export.csv'
         - [ ] Criteria 3: The CSV contains all the columns displayed in the table
-      value: |
-        - [ ]
-        - [ ]
-        - [ ]
     validations:
       required: true
 

@@ -12,6 +12,7 @@ body:
     id: service
     attributes:
       label: Service / Component
+      multiple: true
       description: Which part of the codebase is this bug related to?
       options:
         - Other
@@ -30,6 +31,7 @@ body:
     id: area
     attributes:
       label: Functional Area
+      multiple: true
       description: What is the primary technical concern or domain?
       options:
         - Other
@@ -38,7 +40,8 @@ body:
         - Infrastructure (CI/CD, Docker)
         - Security
         - Documentation
-        - Quality / Testing
+        - Quality Assurance
+        - Testing
         - Developer Experience
     validations:
       required: true
@@ -97,5 +100,31 @@ body:
     attributes:
       label: Additional context
       description: Add any other context about the problem here.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How urgent is this bug?
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
+      default: 1
+    validations:
+      required: false
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact
+      description: How severe is the impact on users?
+      options:
+        - Low
+        - Medium
+        - High
     validations:
       required: false

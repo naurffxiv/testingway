@@ -34,13 +34,28 @@
   }
 
   // Looks up a form value against a map, case-insensitively.
-  // Handles things like a user somehow submitting "low" vs "Low".
-  function getLabelFromMap(map, value) {
-    if (!value) return null;
-    const foundKey = Object.keys(map).find(
-      (k) => k.toLowerCase() === value.toLowerCase(),
-    );
-    return foundKey ? map[foundKey] : null;
+  // Handles comma-separated values for multi-select fields.
+  function getLabelsFromMap(map, rawValue) {
+    if (!rawValue) return [];
+
+    // GitHub sends multi-selects as "Value A, Value B"
+    const values = rawValue
+      .split(",")
+      .map((v) => v.trim())
+      .filter(Boolean);
+
+    const foundLabels = [];
+
+    for (const val of values) {
+      const foundKey = Object.keys(map).find(
+        (k) => k.toLowerCase() === val.toLowerCase(),
+      );
+      if (foundKey) {
+        foundLabels.push(map[foundKey]);
+      }
+    }
+
+    return foundLabels;
   }
 
   // Walk through every field in the label maps and resolve it
@@ -51,8 +66,8 @@
     Object.values(map).forEach((l) => allManagedLabels.add(l));
 
     const value = getFormValue(fieldName);
-    const label = getLabelFromMap(map, value);
-    if (label) labels.push(label);
+    const newLabels = getLabelsFromMap(map, value);
+    labels.push(...newLabels);
   }
 
   // =========================================================================

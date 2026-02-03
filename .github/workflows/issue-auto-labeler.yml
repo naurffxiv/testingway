@@ -35,7 +35,8 @@ jobs:
                 "Infrastructure (CI/CD, Docker)": "Infrastructure",
                 "Security":                       "Security",
                 "Documentation":                  "Documentation",
-                "Quality / Testing":              "Testing",
+                "Quality Assurance":              "QA",
+                "Testing":                        "Testing",
                 "Developer Experience":           "Devex"
               },
               "Priority": {
