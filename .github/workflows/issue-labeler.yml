@@ -23,12 +23,19 @@ jobs:
             // We use a more robust regex to handle various platform rendering quirks.
             function getFormValue(label) {
               const safeLabel = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-              const regex = new RegExp(`### ${safeLabel}\\s*\\n\\n([\\s\\S]*?)(?:\\n{2,}|\\n###|$)`);
+              const regex = new RegExp(`### ${safeLabel}\\s*\\n\\n([\\s\\S]*?)(?:\\n{2,}|\\n###|$)`, 'i');
               const match = body.match(regex);
               const value = match ? match[1].trim() : null;
               
               // Ignore placeholders and "Other"
               return (value === '_No response_' || value === 'Other' || value === 'None') ? null : value;
+            }
+
+            // --- Helper: case-insensitive lookup ---
+            function getLabelFromMap(map, value) {
+              if (!value) return null;
+              const foundKey = Object.keys(map).find(k => k.toLowerCase() === value.toLowerCase());
+              return foundKey ? map[foundKey] : null;
             }
 
             // --- Service / Component ---
@@ -44,8 +51,9 @@ jobs:
             };
 
             const service = getFormValue('Service / Component');
-            if (service && serviceMap[service]) {
-              labels.push(serviceMap[service]);
+            const serviceLabel = getLabelFromMap(serviceMap, service);
+            if (serviceLabel) {
+              labels.push(serviceLabel);
             }
 
             // --- Functional Area ---
@@ -60,8 +68,9 @@ jobs:
             };
 
             const area = getFormValue('Functional Area');
-            if (area && areaMap[area]) {
-              labels.push(areaMap[area]);
+            const areaLabel = getLabelFromMap(areaMap, area);
+            if (areaLabel) {
+              labels.push(areaLabel);
             }
 
             // --- Priority (user-story.yml) ---
@@ -73,8 +82,9 @@ jobs:
             };
 
             const priority = getFormValue('Priority');
-            if (priority && priorityMap[priority]) {
-              labels.push(priorityMap[priority]);
+            const priorityLabel = getLabelFromMap(priorityMap, priority);
+            if (priorityLabel) {
+              labels.push(priorityLabel);
             }
 
             // --- Impact (tech-debt.yml) ---
@@ -85,8 +95,9 @@ jobs:
             };
 
             const impact = getFormValue('Impact');
-            if (impact && impactMap[impact]) {
-              labels.push(impactMap[impact]);
+            const impactLabel = getLabelFromMap(impactMap, impact);
+            if (impactLabel) {
+              labels.push(impactLabel);
             }
 
             // --- Apply labels (skip if none found) ---
