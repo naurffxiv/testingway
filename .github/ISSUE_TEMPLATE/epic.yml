@@ -1,6 +1,5 @@
 name: Epic
 description: Track multiple issues that cannot be fit into one
-title: "[Epic] "
 type: Epic
 projects: ["naurffxiv/10"]
 body:

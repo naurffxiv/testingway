@@ -1,6 +1,5 @@
 name: Task
 description: Generic work item, typically requires little to no code
-title: "[Task] "
 type: Task
 projects: ["naurffxiv/10"]
 body:

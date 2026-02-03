@@ -1,6 +1,5 @@
 name: Bug report
 description: An unexpected error or behavior
-title: "[Bug] "
 type: Bug
 projects: ["naurffxiv/10"]
 body:

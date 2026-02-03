@@ -1,6 +1,5 @@
 name: User Story
 description: A description of a feature from an end-user perspective
-title: "[Story] "
 type: Story
 projects: ["naurffxiv/10"]
 body:

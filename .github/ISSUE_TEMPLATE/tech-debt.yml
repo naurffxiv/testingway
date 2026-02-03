@@ -1,6 +1,5 @@
 name: Tech Debt
 description: Work needed to address suboptimal code or design decisions
-title: "[Tech Debt] "
 type: Tech Debt
 projects: ["naurffxiv/10"]
 body:
